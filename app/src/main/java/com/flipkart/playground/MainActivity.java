@@ -5,11 +5,23 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
+
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.flipkart.toolbox.AppController;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,5 +59,34 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void getBook(String url) {
+        JsonObjectRequest getDataRequest = new JsonObjectRequest(url, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    Toast.makeText(MainActivity.this, "Success! Check your log for data :)", Toast.LENGTH_SHORT).show();
+
+                    JSONArray mItemArray = response.getJSONArray("items");
+                    JSONObject mBookObject = mItemArray.getJSONObject(0);
+                    JSONObject mVolumeInfo = mBookObject.getJSONObject("volumeInfo");
+
+                    Log.e("DATA", "Title - " + mVolumeInfo.getString("title")
+                            + " Published Date - " + mVolumeInfo.getString("publishedDate"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(MainActivity.this, "Something went wrong!", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Add getDataRequest to our global instance of Volley RequestQueue
+        AppController.getInstance().addToRequestQueue(getDataRequest);
     }
 }
