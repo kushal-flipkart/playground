@@ -2,7 +2,6 @@ package com.flipkart.playground;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -11,10 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.flipkart.toolbox.AppController;
+import com.flipkart.toolbox.CustomPriorityRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getBook("https://www.googleapis.com/books/v1/volumes?q=isbn:0735619670");
+                //getBook("https://www.googleapis.com/books/v1/volumes?q=isbn:0735619670");
             }
         });
     }
@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getBook(String url) {
-        JsonObjectRequest getDataRequest = new JsonObjectRequest(url, new Response.Listener<JSONObject>() {
+        CustomPriorityRequest getDataRequest = new CustomPriorityRequest(url, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 try {
@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        getDataRequest.setPriority(Request.Priority.LOW);
         // Add getDataRequest to our global instance of Volley RequestQueue
         AppController.getInstance().addToRequestQueue(getDataRequest);
     }
