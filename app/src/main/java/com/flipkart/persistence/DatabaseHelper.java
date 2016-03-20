@@ -20,18 +20,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 1;
 
     // Database Name
-    private static final String DATABASE_NAME = "booksManager";
+    public static final String DATABASE_NAME = "booksManager";
 
     // Books table name
-    private static final String TABLE_BOOKS = "books";
+    public static final String TABLE_BOOKS = "books";
 
     // Books Table Columns names
-    private static final String KEY_ID = "id";
-    private static final String KEY_TITLE = "title";
-    private static final String KEY_PUBLISH_DATE = "publishDate";
+    public static final String KEY_ID = "id";
+    public static final String KEY_TITLE = "title";
+    public static final String KEY_PUBLISH_DATE = "publishDate";
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
